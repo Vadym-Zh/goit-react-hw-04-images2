@@ -1,130 +1,68 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-import css from './Searchbar.module.css';
-
-class Searchbar extends Component {
-  state = {
-    searchItem: '',
-  };
-
-  componentDidMount() {
-    const LocalSearchItem = localStorage.getItem('LocalSearchItem');
-    // console.log(LocalSearchItem);
-    if (LocalSearchItem !== null) {
-      this.setState({ searchItem: JSON.parse(LocalSearchItem) });
-    }
-  }
-
-  onHandleChange = e => {
-    // console.log(e.currentTarget.value.toLowerCase());
-    this.setState({
-      searchItem: e.currentTarget.value.toLowerCase(),
-    });
-
-    localStorage.setItem(
-      'LocalSearchItem',
-      JSON.stringify(this.state.searchItem)
-    );
-  };
-
-  searchSubmit = e => {
-    e.preventDefault();
-    const { searchItem } = this.state;
-    // console.log(searchItem);
-    if (this.state.searchItem.trim() === '') {
-      alert('Please, enter your request!');
-      return;
-    }
-    this.props.onSubmit(searchItem);
-    this.setState({
-      searchItem: '',
-    });
-    localStorage.clear();
-  };
-
-  render() {
-    return (
-      <header className={css.searchbar}>
-        <form className={css.searchForm} onSubmit={this.searchSubmit}>
-          <button className={css.searchFormButton} type="submit">
-            <span className={css.searchFormButtonLabel}>Search</span>
-          </button>
-
-          <input
-            className={css.searchFormInput}
-            type="text"
-            // autocomplete="off"
-            // autofocus
-            placeholder="Search images and photos"
-            value={this.state.searchItem}
-            onChange={this.onHandleChange}
-          />
-        </form>
-      </header>
-    );
-  }
-}
-
-Searchbar.propTypes = {
-  onSubmit: PropTypes.func.isRequired,
-};
-
-export default Searchbar;
-
-//-//-// Через хуки //-//-//
-// import { useState, useEffect } from 'react';
+// import React, { Component } from 'react';
 // import PropTypes from 'prop-types';
 // import css from './Searchbar.module.css';
 
-// function Searchbar() {
-//   const [searchItem, useSearchItem] = useState('');
+// class Searchbar extends Component {
+//   state = {
+//     searchItem: '',
+//   };
 
-//   const LocalSearchItem = localStorage.getItem('LocalSearchItem');
-
-//   useEffect(() => {
+//   componentDidMount() {
+//     const LocalSearchItem = localStorage.getItem('LocalSearchItem');
+//     // console.log(LocalSearchItem);
 //     if (LocalSearchItem !== null) {
-//       useSearchItem(JSON.parse(LocalSearchItem));
+//       this.setState({ searchItem: JSON.parse(LocalSearchItem) });
 //     }
-//   }, []);
-
-//   function onHandleChange(e) {
-//     useSearchItem(e.currentTarget.value.toLowerCase());
 //   }
-//   localStorage.setItem(
-//     'LocalSearchItem',
-//     JSON.stringify(this.state.searchItem)
-//   );
 
-//   function searchSubmit(e) {
+//   onHandleChange = e => {
+//     // console.log(e.currentTarget.value.toLowerCase());
+//     this.setState({
+//       searchItem: e.currentTarget.value.toLowerCase(),
+//     });
+
+//     localStorage.setItem(
+//       'LocalSearchItem',
+//       JSON.stringify(this.state.searchItem)
+//     );
+//   };
+
+//   searchSubmit = e => {
 //     e.preventDefault();
-//     if (searchItem.trim() === '') {
+//     const { searchItem } = this.state;
+//     // console.log(searchItem);
+//     if (this.state.searchItem.trim() === '') {
 //       alert('Please, enter your request!');
 //       return;
 //     }
 //     this.props.onSubmit(searchItem);
-//     useSearchItem('');
+//     this.setState({
+//       searchItem: '',
+//     });
 //     localStorage.clear();
+//   };
+
+//   render() {
+//     return (
+//       <header className={css.searchbar}>
+//         <form className={css.searchForm} onSubmit={this.searchSubmit}>
+//           <button className={css.searchFormButton} type="submit">
+//             <span className={css.searchFormButtonLabel}>Search</span>
+//           </button>
+
+//           <input
+//             className={css.searchFormInput}
+//             type="text"
+//             // autocomplete="off"
+//             // autofocus
+//             placeholder="Search images and photos"
+//             value={this.state.searchItem}
+//             onChange={this.onHandleChange}
+//           />
+//         </form>
+//       </header>
+//     );
 //   }
-
-//   return (
-//     <header className={css.searchbar}>
-//       <form className={css.searchForm} onSubmit={searchSubmit}>
-//         <button className={css.searchFormButton} type="submit">
-//           <span className={css.searchFormButtonLabel}>Search</span>
-//         </button>
-
-//         <input
-//           className={css.searchFormInput}
-//           type="text"
-//           // autocomplete="off"
-//           // autofocus
-//           placeholder="Search images and photos"
-//           value={searchItem}
-//           onChange={onHandleChange}
-//         />
-//       </form>
-//     </header>
-//   );
 // }
 
 // Searchbar.propTypes = {
@@ -132,3 +70,35 @@ export default Searchbar;
 // };
 
 // export default Searchbar;
+
+//-//-// Через хуки //-//-//
+// import { useState } from 'react';
+import PropTypes from 'prop-types';
+import css from './Searchbar.module.css';
+
+function Searchbar({ onSubmit }) {
+  return (
+    <header className={css.searchbar}>
+      <form className={css.searchForm} onSubmit={onSubmit}>
+        <button className={css.searchFormButton} type="submit">
+          <span className={css.searchFormButtonLabel}>Search</span>
+        </button>
+
+        <input
+          name="search"
+          className={css.searchFormInput}
+          type="text"
+          autoComplete="on"
+          autoFocus
+          placeholder="Search images and photos"
+        />
+      </form>
+    </header>
+  );
+}
+
+Searchbar.propTypes = {
+  onSubmit: PropTypes.func.isRequired,
+};
+
+export default Searchbar;

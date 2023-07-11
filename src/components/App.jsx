@@ -1,5 +1,5 @@
 // import React, { Component } from 'react';
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import Searchbar from './Searchbar/Searchbar';
 import { getImages } from './services/pixabayAPI';
 import ImageGallery from './ImageGallery/ImageGallery';
@@ -53,8 +53,18 @@ export function App() {
   }, [query, page]);
 
   // Запит зображення на API
-  function onSearch(searchItem) {
-    setQuery(searchItem);
+  function onSearch(e) {
+    e.preventDefault();
+
+    const form = e.currentTarget;
+    // console.log(form);
+    const searchValue = form.elements.search.value.toLowerCase();
+    console.log(`Шукаємо:"${searchValue}"`);
+    if (searchValue.trim() === '') {
+      alert('Please, enter your request!');
+      return;
+    }
+    setQuery(searchValue);
     setPics([]);
     setPage(1);
     setLoadBtn(true);
